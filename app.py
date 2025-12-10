@@ -117,9 +117,11 @@ def process_csv(df, website_column, live_box, batch_size=50):
         live_box.json(ai_data)
 
         for k, v in ai_data.items():
+            if k not in df.columns:
+                df[k] = None  # Create column if missing
             df.loc[idx, k] = v
-        df.loc[idx, 'status'] = 'done'
 
+        df.loc[idx, 'status'] = 'done'
         time.sleep(30)  # Throttle API calls
 
     return df
