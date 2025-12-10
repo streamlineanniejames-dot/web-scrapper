@@ -119,6 +119,11 @@ def process_csv(df, website_column, live_box, batch_size=50):
         for k, v in ai_data.items():
             if k not in df.columns:
                 df[k] = None  # Create column if missing
+
+            # Convert lists/dicts to JSON strings for safe storage
+            if isinstance(v, (list, dict)):
+                v = json.dumps(v, ensure_ascii=False)
+            
             df.loc[idx, k] = v
 
         df.loc[idx, 'status'] = 'done'
